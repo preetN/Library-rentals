@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router";
 import Home from "./pages/home/Home";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
-
+import "../src/App.css";
 function App() {
   return (
     <>
