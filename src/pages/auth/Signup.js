@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import CustomInput from "../../components/custominput/CustomInput";
 import { toast } from "react-toastify";
+import { auth } from "../../config/firebase-config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 function Signup() {
   const [form, setForm] = useState("");
   const inputs = [
@@ -56,19 +58,38 @@ function Signup() {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (form.password !== form.confirmpassword) {
       toast.error("Password and confirm password did not match");
       return;
+    }
+    try {
+      const authSnapPromise = createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+      toast.promise(authSnapPromise, { pending: "In Progress" });
+      const authSnap = await authSnapPromise;
+      if (authSnap.user.uid) {
+        toast.success("new user created");
+      }
+    } catch (e) {
+      console.log(e.message);
+      if (e.message.includes("auth/email-already-in-use")) {
+        toast.error("Email already in use, Try using different email");
+      } else {
+        toast.error(e.message);
+      }
     }
   };
   return (
     <DefaultLayout>
       <div className="p-3 border shadow rounded admin-form">
         <Form onSubmit={handleOnSubmit}>
-          {inputs.map((item) => (
-            <CustomInput onChange={handleOnChange} {...item} />
+          {inputs.map((item, i) => (
+            <CustomInput key={i} onChange={handleOnChange} {...item} />
           ))}
           <Button variant="primary" type="submit">
             Register
