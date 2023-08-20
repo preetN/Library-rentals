@@ -4,10 +4,12 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import CustomInput from "../../components/custominput/CustomInput";
 import { toast } from "react-toastify";
-import { auth } from "../../config/firebase-config";
+import { auth, db } from "../../config/firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+
 function Signup() {
-  const [form, setForm] = useState("");
+  const [form, setForm] = useState({});
   const inputs = [
     {
       label: "First Name",
@@ -64,19 +66,22 @@ function Signup() {
       toast.error("Password and confirm password did not match");
       return;
     }
+    const { email, password } = form;
     try {
       const authSnapPromise = createUserWithEmailAndPassword(
         auth,
-        form.email,
-        form.password
+        email,
+        password
       );
       toast.promise(authSnapPromise, { pending: "In Progress" });
       const authSnap = await authSnapPromise;
       if (authSnap.user.uid) {
-        toast.success("new user created");
+        const { password, confirmPassword, ...rest } = form;
+        await setDoc(doc(db, "users", authSnap.user.uid), rest);
+
+        toast.success("New user created");
       }
     } catch (e) {
-      console.log(e.message);
       if (e.message.includes("auth/email-already-in-use")) {
         toast.error("Email already in use, Try using different email");
       } else {
