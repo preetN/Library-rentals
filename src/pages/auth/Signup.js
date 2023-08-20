@@ -3,6 +3,7 @@ import DefaultLayout from "../../components/Layouts/DefaultLayout";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import CustomInput from "../../components/custominput/CustomInput";
+import { toast } from "react-toastify";
 function Signup() {
   const [form, setForm] = useState("");
   const inputs = [
@@ -57,6 +58,10 @@ function Signup() {
   };
   const handleOnSubmit = (e) => {
     e.preventDefault();
+    if (form.password !== form.confirmpassword) {
+      toast.error("Password and confirm password did not match");
+      return;
+    }
   };
   return (
     <DefaultLayout>
