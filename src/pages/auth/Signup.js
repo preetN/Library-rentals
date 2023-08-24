@@ -1,69 +1,69 @@
-import React, { useState } from "react";
-import DefaultLayout from "../../components/Layouts/DefaultLayout";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import CustomInput from "../../components/custominput/CustomInput";
-import { toast } from "react-toastify";
-import { auth, db } from "../../config/firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import React, { useState } from "react";
+import { Alert } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { toast } from "react-toastify";
+import CustomInput from "../../components/custominput/CustomInput";
+import DefaultLayout from "../../components/Layouts/DefaultLayout";
+import { auth, db } from "../../config/firebase-config";
 
-function Signup() {
+function SignUp() {
   const [form, setForm] = useState({});
+  const [errorMsg, setErrorMsg] = useState();
+
   const inputs = [
     {
       label: "First Name",
-      name: "fname",
+      name: "fName",
       type: "text",
-      placeholder: "First name",
+      placeholder: "Sam",
       required: true,
     },
     {
       label: "Last Name",
-      name: "lname",
+      name: "lName",
       type: "text",
-      placeholder: "Last name",
+      placeholder: "Smith",
       required: true,
     },
     {
       label: "Phone",
       name: "phone",
       type: "number",
-      placeholder: "04xxxxxxxx",
+      placeholder: "04xxxxxx",
       required: true,
     },
     {
       label: "Email",
       name: "email",
       type: "email",
-      placeholder: "email@email.com",
+      placeholder: "sam@smith.com",
       required: true,
     },
     {
       label: "Password",
       name: "password",
       type: "password",
-      placeholder: "********",
+      placeholder: "*******",
       required: true,
       minLength: 6,
     },
     {
       label: "Confirm Password",
-      name: "confirmpassword",
+      name: "confirmPassword",
       type: "password",
-      placeholder: "********",
+      placeholder: "*******",
       required: true,
       minLength: 6,
     },
   ];
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    if (form.password !== form.confirmpassword) {
-      toast.error("Password and confirm password did not match");
+    if (form.password !== form.confirmPassword) {
+      toast.error("Confirm pass and pass did not match");
       return;
     }
     const { email, password } = form;
@@ -73,29 +73,53 @@ function Signup() {
         email,
         password
       );
-      toast.promise(authSnapPromise, { pending: "In Progress" });
+      toast.promise(authSnapPromise, {
+        pending: "In Progress...",
+      });
+
       const authSnap = await authSnapPromise;
       if (authSnap.user.uid) {
+        console.log("hello");
+        // const docRef = doc(db, "users", authSnap.user.uid);
         const { password, confirmPassword, ...rest } = form;
-        await setDoc(doc(db, "users", authSnap.user.uid), rest);
+        setDoc(doc(db, "users", authSnap.user.uid), rest)
+          .then(() => console.log("Done"))
+          .catch(() => console.log("Error"));
 
-        toast.success("New user created");
+        toast.success("New user has been created");
       }
     } catch (e) {
-      if (e.message.includes("auth/email-already-in-use")) {
-        toast.error("Email already in use, Try using different email");
+      let { message } = e;
+      console.log(e);
+      if (message.includes("auth/email-already-in-use")) {
+        toast.error("Email already exist, try with different email");
       } else {
-        toast.error(e.message);
+        toast.error(message);
       }
     }
   };
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
   return (
     <DefaultLayout>
       <div className="p-3 border shadow rounded admin-form">
+        {errorMsg && <Alert variant={"danger"}>{errorMsg}</Alert>}
         <Form onSubmit={handleOnSubmit}>
-          {inputs.map((item, i) => (
-            <CustomInput key={i} onChange={handleOnChange} {...item} />
+          {inputs.map((input, i) => (
+            <CustomInput
+              key={i}
+              onChange={handleOnChange}
+              // label={input.label}
+              // placeholder={input.placeholder}
+              // type={input.type}
+              {...input}
+            />
           ))}
+
           <Button variant="primary" type="submit">
             Register
           </Button>
@@ -105,4 +129,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SignUp;

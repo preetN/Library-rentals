@@ -6,9 +6,12 @@ import CustomInput from "../../components/custominput/CustomInput";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase-config";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { getUserAction } from "../../user/userAction";
+
 function Login() {
   const [form, setForm] = useState("");
-
+  const dispatch = useDispatch();
   const inputs = [
     {
       label: "Email",
@@ -38,7 +41,8 @@ function Login() {
         form.password
       );
       toast.promise(signInPromise, { pending: "In Progress" });
-      const signInValue = await signInPromise;
+      const { user } = await signInPromise;
+      await getUserAction(user.uid, dispatch);
       toast.success("Logging In");
     } catch (e) {
       if (e.message.includes("auth/wrong-password")) {
