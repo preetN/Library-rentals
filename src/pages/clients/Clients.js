@@ -1,7 +1,12 @@
 import React from "react";
+import AdminLayouts from "../../components/Layouts/AdminLayouts";
 
 function Clients() {
-  return <div></div>;
+  return (
+    <>
+      <AdminLayouts>Clients</AdminLayouts>
+    </>
+  );
 }
 
 export default Clients;

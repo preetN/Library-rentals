@@ -1,7 +1,14 @@
 import React from "react";
+import AdminLayouts from "../../components/Layouts/AdminLayouts";
 
 function Books() {
-  return <div></div>;
+  return (
+    <>
+      <AdminLayouts>
+        <div>Books</div>
+      </AdminLayouts>
+    </>
+  );
 }
 
 export default Books;
