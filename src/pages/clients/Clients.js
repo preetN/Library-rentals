@@ -4,7 +4,10 @@ import AdminLayouts from "../../components/Layouts/AdminLayouts";
 function Clients() {
   return (
     <>
-      <AdminLayouts>Clients</AdminLayouts>
+      <AdminLayouts>
+        <h3>Clients</h3>
+        <hr />
+      </AdminLayouts>
     </>
   );
 }

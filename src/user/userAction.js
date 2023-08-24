@@ -2,7 +2,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import { setAdmin } from "./userSlice";
 import { toast } from "react-toastify";
-export const getUserAction = async (uid, dispatch) => {
+export const getUserAction = (uid) => async (dispatch) => {
   try {
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);

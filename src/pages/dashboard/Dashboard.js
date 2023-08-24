@@ -5,7 +5,8 @@ function Dashboard() {
   return (
     <>
       <AdminLayouts>
-        <div>Dashboard</div>
+        <h3>Dashboard</h3>
+        <hr></hr>
       </AdminLayouts>
     </>
   );

@@ -5,7 +5,8 @@ function Books() {
   return (
     <>
       <AdminLayouts>
-        <div>Books</div>
+        <h3>Books</h3>
+        <hr />
       </AdminLayouts>
     </>
   );

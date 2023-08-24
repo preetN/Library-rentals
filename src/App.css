@@ -1,5 +1,6 @@
 .main {
   min-height: 70vh;
+  padding: 1rem;
 }
 .admin-form {
   width: 400px;

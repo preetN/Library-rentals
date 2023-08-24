@@ -4,7 +4,10 @@ import AdminLayouts from "../../components/Layouts/AdminLayouts";
 function History() {
   return (
     <>
-      <AdminLayouts>History</AdminLayouts>
+      <AdminLayouts>
+        <h3>History</h3>
+        <hr />
+      </AdminLayouts>
     </>
   );
 }

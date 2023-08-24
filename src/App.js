@@ -10,8 +10,16 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import "../src/App.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import PrivateRoute from "./components/privateRoute/PrivateRoute";
+import { useDispatch } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./config/firebase-config";
+import { getUserAction } from "./user/userAction";
 function App() {
+  const dispatch = useDispatch();
+  onAuthStateChanged(auth, (user) => {
+    user?.uid && dispatch(getUserAction(user.uid));
+  });
   return (
     <>
       <div>
@@ -19,10 +27,38 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/books" element={<Books />} />
-          <Route path="/clients" element={<Clients />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/history"
+            element={
+              <PrivateRoute>
+                <History />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/books"
+            element={
+              <PrivateRoute>
+                <Books />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/clients"
+            element={
+              <PrivateRoute>
+                <Clients />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
           <Route path="/*" element={<Home />} />
         </Routes>
         <ToastContainer />

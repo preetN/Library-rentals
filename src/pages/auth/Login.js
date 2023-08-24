@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DefaultLayout from "../../components/Layouts/DefaultLayout";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -6,12 +6,18 @@ import CustomInput from "../../components/custominput/CustomInput";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase-config";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserAction } from "../../user/userAction";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [form, setForm] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { admin } = useSelector((state) => state.adminInfo);
+  useEffect(() => {
+    admin?.uid && navigate("/dashboard");
+  }, [admin, navigate]);
   const inputs = [
     {
       label: "Email",
@@ -44,6 +50,7 @@ function Login() {
       const { user } = await signInPromise;
       await getUserAction(user.uid, dispatch);
       toast.success("Logging In");
+      navigate("/dashboard");
     } catch (e) {
       if (e.message.includes("auth/wrong-password")) {
         toast.error("Invalid Password");
