@@ -48,7 +48,7 @@ function Login() {
       );
       toast.promise(signInPromise, { pending: "In Progress" });
       const { user } = await signInPromise;
-      await getUserAction(user.uid, dispatch);
+      dispatch(getUserAction(user.uid));
       toast.success("Logging In");
       navigate("/dashboard");
     } catch (e) {
