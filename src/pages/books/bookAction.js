@@ -65,6 +65,7 @@ export const updateBookAction =
       toast.promise(docRefPromise, {
         pending: "In Progress...",
       });
+
       await docRefPromise;
       dispatch(getAllBookAction());
       toast.success("Book updated successfully");
