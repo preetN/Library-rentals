@@ -31,6 +31,7 @@ function BookTable() {
   const handleOnChange = (e) => {
     const { value } = e.target;
     console.log(value);
+    //To filter booklist
     const filteredBook = bookList.filter((book) =>
       book.title.toLowerCase().includes(value.toLowerCase())
     );

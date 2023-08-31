@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase-config";
 import { getUserAction } from "./user/userAction";
+import NewBook from "./pages/books/NewBook";
+import EditBook from "./pages/books/EditBook";
 function App() {
   const dispatch = useDispatch();
   onAuthStateChanged(auth, (user) => {
@@ -25,7 +27,7 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/signin" element={<Login />} />
+          <Route path="signin" element={<Login />} />
           <Route
             path="admin-signup"
             element={
@@ -35,7 +37,7 @@ function App() {
             }
           />
           <Route
-            path="/history"
+            path="history"
             element={
               <PrivateRoute>
                 <History />
@@ -43,7 +45,7 @@ function App() {
             }
           />
           <Route
-            path="/books"
+            path="books"
             element={
               <PrivateRoute>
                 <Books />
@@ -51,7 +53,7 @@ function App() {
             }
           />
           <Route
-            path="/clients"
+            path="clients"
             element={
               <PrivateRoute>
                 <Clients />
@@ -59,10 +61,26 @@ function App() {
             }
           />
           <Route
-            path="/dashboard"
+            path="dashboard"
             element={
               <PrivateRoute>
                 <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="new-book"
+            element={
+              <PrivateRoute>
+                <NewBook />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="edit-book/:id"
+            element={
+              <PrivateRoute>
+                <EditBook />
               </PrivateRoute>
             }
           />

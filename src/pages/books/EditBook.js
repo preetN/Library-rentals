@@ -3,8 +3,8 @@ import { Button, Form } from "react-bootstrap";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import CustomInput from "../../components/customInput/CustomInput";
-import AdminLayout from "../../components/layouts/AdminLayout";
+import CustomInput from "../../components/custominput/CustomInput";
+import AdminLayout from "../../components/Layouts/AdminLayouts";
 import {
   deleteBookAction,
   getBookAction,
