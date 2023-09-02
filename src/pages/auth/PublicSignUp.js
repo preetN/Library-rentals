@@ -8,8 +8,9 @@ import { toast } from "react-toastify";
 import CustomInput from "../../components/custominput/CustomInput";
 import { auth, db } from "../../config/firebase-config";
 import AdminLayouts from "../../components/Layouts/AdminLayouts";
-function SignUp() {
-  const [form, setForm] = useState({ role: "admin" });
+import DefaultLayout from "../../components/Layouts/DefaultLayout";
+function PublicSignUp() {
+  const [form, setForm] = useState({ role: "student" });
   const [errorMsg, setErrorMsg] = useState();
 
   const inputs = [
@@ -104,7 +105,7 @@ function SignUp() {
   };
 
   return (
-    <AdminLayouts>
+    <DefaultLayout>
       <div className="p-3 border shadow rounded admin-form">
         {errorMsg && <Alert variant={"danger"}>{errorMsg}</Alert>}
         <Form onSubmit={handleOnSubmit}>
@@ -120,12 +121,12 @@ function SignUp() {
           ))}
 
           <Button variant="primary" type="submit">
-            Register
+            Register as Student
           </Button>
         </Form>
       </div>
-    </AdminLayouts>
+    </DefaultLayout>
   );
 }
 
-export default SignUp;
+export default PublicSignUp;

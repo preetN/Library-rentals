@@ -17,10 +17,17 @@ import { auth } from "./config/firebase-config";
 import { getUserAction } from "./user/userAction";
 import NewBook from "./pages/books/NewBook";
 import EditBook from "./pages/books/EditBook";
+import { useEffect } from "react";
+import { getAllBookAction } from "./pages/books/bookAction";
+import BookLanding from "./pages/books/BookLanding";
+import PublicSignUp from "./pages/auth/PublicSignUp";
 function App() {
   const dispatch = useDispatch();
   onAuthStateChanged(auth, (user) => {
     user?.uid && dispatch(getUserAction(user.uid));
+  });
+  useEffect(() => {
+    dispatch(getAllBookAction());
   });
   return (
     <>
@@ -28,6 +35,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="signin" element={<Login />} />
+          <Route path="/signup" element={<PublicSignUp />} />
+          <Route path="book/:bookId" element={<BookLanding />} />
+          {/* private route */}
           <Route
             path="admin-signup"
             element={
@@ -84,7 +94,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/*" element={<Home />} />
+          <Route path="/*" element={<p>Url is invalid</p>} />
         </Routes>
         <ToastContainer />
       </div>

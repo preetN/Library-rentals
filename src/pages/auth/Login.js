@@ -70,6 +70,14 @@ function Login() {
             Login
           </Button>
         </Form>
+        <p>
+          Forget Password?
+          <a href="/reset-password">Reset Password</a>
+        </p>
+        <p>
+          Want to SignUp
+          <a href="/signup">SignUp</a>
+        </p>
       </div>
     </DefaultLayout>
   );

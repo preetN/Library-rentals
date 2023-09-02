@@ -4,6 +4,7 @@ function SideBar() {
   return (
     <div className="bg-dark text-light">
       <div className="mt-4 text-center">
+        Admin
         <hr />
         <div className="">
           <ul className="list-unstyled ms-5 me-5">
@@ -29,7 +30,7 @@ function SideBar() {
             </li>
             <li>
               <Link className="nav-link" to="/admin-signup">
-                Signup
+                Signup new Admin
               </Link>
             </li>
           </ul>
