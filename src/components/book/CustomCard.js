@@ -10,7 +10,7 @@ function CustomCard({ id, title, summary, url }) {
           <Card.Body>
             <Card.Title>{title}</Card.Title>
             <Card.Text>{summary}</Card.Text>
-            <Button variant="primary">BookDetailee</Button>
+            <Button variant="primary">Book Details</Button>
           </Card.Body>
         </Card>
       </Link>

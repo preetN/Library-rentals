@@ -2,11 +2,10 @@ import { Routes, Route } from "react-router";
 import Home from "./pages/home/Home";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
-import History from "./pages/history/History";
+import BorrowHistory from "./pages/borrow-history/BorrowHistory";
 import Books from "./pages/books/Books";
 import Clients from "./pages/clients/Clients";
 import Dashboard from "./pages/dashboard/Dashboard";
-
 import "../src/App.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,6 +20,7 @@ import { useEffect } from "react";
 import { getAllBookAction } from "./pages/books/bookAction";
 import BookLanding from "./pages/books/BookLanding";
 import PublicSignUp from "./pages/auth/PublicSignUp";
+import ResetPassword from "./pages/auth/ResetPassword";
 function App() {
   const dispatch = useDispatch();
   onAuthStateChanged(auth, (user) => {
@@ -37,6 +37,7 @@ function App() {
           <Route path="signin" element={<Login />} />
           <Route path="/signup" element={<PublicSignUp />} />
           <Route path="book/:bookId" element={<BookLanding />} />
+          <Route path="reset-password" element={<ResetPassword />} />
           {/* private route */}
           <Route
             path="admin-signup"
@@ -50,7 +51,7 @@ function App() {
             path="history"
             element={
               <PrivateRoute>
-                <History />
+                <BorrowHistory />
               </PrivateRoute>
             }
           />

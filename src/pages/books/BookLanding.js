@@ -1,15 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DefaultLayout from "../../components/Layouts/DefaultLayout";
 import { Button, Row, Col, Container } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import Login from "../auth/Login";
+import { addNewBorrowAction } from "../borrow-history/borrowHistoryAction";
 
 function BookLanding() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { bookId } = useParams();
+  const user = useSelector((state) => state.adminInfo.admin);
   const bookList = useSelector((state) => state.book.bookList);
-  const selectedBook = bookList.find((book) => book.id === bookId);
-  const { title, name, year, summary, url } = selectedBook;
-  const handleOnBorrow = () => {};
+  const [selectedBook, setSelectedBook] = useState({});
+  useEffect(() => {
+    const tempBook = bookList.find((book) => book.id === bookId);
+    setSelectedBook(tempBook);
+  }, [bookList, bookId]);
+
+  console.log(selectedBook);
+  const handleOnBorrow = () => {
+    //create history obj
+    const history = {
+      userId: user.uid,
+      userName: user.fName,
+      bookId: bookId,
+      title: selectedBook?.title,
+      url: selectedBook?.url,
+      borrowDate: Date.now(),
+      //days in millisecond
+      availableFrom: Date.now() + (14 + 24 + 60 + 60 + 1000),
+    };
+    dispatch(addNewBorrowAction(history));
+  };
   return (
     <DefaultLayout>
       <Container>
@@ -21,17 +45,30 @@ function BookLanding() {
         <Row>
           {/* Image */}
           <Col>
-            <img src={url} />
+            <img src={selectedBook?.url} />
           </Col>
           <Col>
-            <h1>{title}</h1>
+            <h1>{selectedBook?.title}</h1>
             <p>Rating:5 stars</p>
             <p>
-              {name}-{year}
+              {selectedBook?.name}-{selectedBook?.year}
             </p>
-            <p>{summary}</p>
+            <p>{selectedBook?.summary}</p>
             <p>
-              <Button onClick={handleOnBorrow}>Borrow</Button>
+              {user?.uid ? (
+                selectedBook?.isAvailable ? (
+                  <Button onClick={handleOnBorrow}>Borrow </Button>
+                ) : (
+                  <p>
+                    <Button disabled>Not available</Button> Available after{" "}
+                    {new Date(selectedBook?.availableFrom).toString()} date
+                  </p>
+                )
+              ) : (
+                <Button onClick={() => navigate("/signin")}>
+                  Login to Borrow
+                </Button>
+              )}
             </p>
           </Col>
         </Row>
