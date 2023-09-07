@@ -1,52 +1,69 @@
 import React from "react";
 import AdminLayouts from "../../components/Layouts/AdminLayouts";
-import { PieChart, Pie } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 import { useSelector } from "react-redux";
 import { Card, Row, Col } from "react-bootstrap";
+import profileimg from "./profile.jpeg";
 function Dashboard() {
   const { admin } = useSelector((state) => state.adminInfo);
   const { bookList } = useSelector((state) => state.book);
+  const avail = bookList.filter((book) => book.isAvailable === true);
+  const Navail = bookList.filter((book) => book.isAvailable === false);
+
   const data = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-    { name: "Group E", value: 278 },
-    { name: "Group F", value: 189 },
+    {
+      name: "Available books",
+      Available: avail.length,
+      Not_available: Navail.length,
+    },
   ];
   return (
     <>
       <AdminLayouts>
-        <Card style={{ width: "18rem" }}>
-          <Card.Img variant="top" src="profile.jpeg" />
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
+        <div className="d-flex justify-content-around">
+          <Card style={{ width: "18rem" }}>
+            <Card.Img variant="top" src={profileimg} />
+            <Card.Body>
+              <Card.Title>{admin.fName + " " + admin.lName}</Card.Title>
+              <Card.Text>
+                <div>{"(" + admin.role + ")"}</div>
+                <div>{admin.email}</div>
+                <div>{admin.phone}</div>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+          <div>
+            <h3 className="mt-3">Number of books available to borrow</h3>
 
-            <Card.Text>
-              <Row>
-                <Col>
-                  {" "}
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Col>
-                <Col>ejfnkemfklew</Col>
-              </Row>
-            </Card.Text>
-          </Card.Body>
-        </Card>
-        <PieChart width={400} height={400}>
-          <Pie
-            dataKey="value"
-            startAngle={180}
-            endAngle={0}
-            data={data}
-            cx={200}
-            cy={200}
-            outerRadius={80}
-            fill="#8884d8"
-            label
-          />
-        </PieChart>
+            <BarChart
+              width={500}
+              height={300}
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Not_available" fill="#8884d8" />
+              <Bar dataKey="Available" fill="#82ca9d" />
+            </BarChart>
+          </div>
+        </div>
       </AdminLayouts>
     </>
   );
