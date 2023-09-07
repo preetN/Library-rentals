@@ -4,7 +4,6 @@ import { Button, Row, Col, Container } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import Login from "../auth/Login";
 import { addNewBorrowAction } from "../borrow-history/borrowHistoryAction";
 
 function BookLanding() {
@@ -39,13 +38,13 @@ function BookLanding() {
       <Container>
         <Row>
           <Link to={"/"}>
-            <Button>&lt; Go Back</Button>
+            <Button className="mb-2">&lt; Go Back</Button>
           </Link>
         </Row>
         <Row>
           {/* Image */}
           <Col>
-            <img src={selectedBook?.url} />
+            <img src={selectedBook?.url} alt="pic" />
           </Col>
           <Col>
             <h1>{selectedBook?.title}</h1>

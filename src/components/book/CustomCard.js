@@ -6,7 +6,7 @@ function CustomCard({ id, title, summary, url }) {
     <div>
       <Link to={`/book/${id}`} className="nav-link">
         <Card style={{ width: "18rem" }}>
-          <Card.Img variant="top" src={url} />
+          <Card.Img variant="top" src={url} alt="bookpic" />
           <Card.Body>
             <Card.Title>{title}</Card.Title>
             <Card.Text>{summary}</Card.Text>

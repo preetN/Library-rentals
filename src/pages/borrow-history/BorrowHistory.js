@@ -9,10 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateBookAction } from "../books/bookAction";
 
 function History() {
+  const { admin } = useSelector((state) => state.adminInfo);
+  const uid = admin.uid;
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllBorrowHistoryAction());
+    dispatch(getAllBorrowHistoryAction(uid));
   }, []);
+
   const historyList = useSelector(
     (state) => state.borrowHistory.borrowHistoryList
   );
@@ -39,7 +42,7 @@ function History() {
       isReturn: true,
       availableFrom: Date.now(),
     };
-    dispatch(updateHistoryAction(borrowObj));
+    dispatch(updateHistoryAction(borrowObj, uid));
     const bookObj = {
       id: history.bookId,
       isAvailable: true,
@@ -61,6 +64,7 @@ function History() {
           <tr>
             <th>#</th>
             <th>Image</th>
+            <th>BorrowedBy</th>
             <th>BorrowedAt</th>
             <th>ReturnedAt</th>
             <th>Action</th>
@@ -74,8 +78,14 @@ function History() {
                 <td>
                   <img src={item.url} width={"100px"} />
                 </td>
+                <td>{item.userName}</td>
+
                 <td>{new Date(item.borrowDate).toDateString()}</td>
-                <td>{new Date(item.availableFrom).toDateString()}</td>
+                <td>
+                  {item.isReturn
+                    ? new Date(item.availableFrom).toDateString()
+                    : "Not yet Returned"}
+                </td>
                 <td>
                   {item.isReturn ? (
                     "Returned"

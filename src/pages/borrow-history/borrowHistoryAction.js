@@ -1,11 +1,11 @@
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
-  getDoc,
   getDocs,
   setDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../../config/firebase-config";
@@ -37,9 +37,12 @@ export const addNewBorrowAction = (transactionObj) => async (dispatch) => {
     toast.error(e.message);
   }
 };
-export const getAllBorrowHistoryAction = () => async (dispatch) => {
+export const getAllBorrowHistoryAction = (uid) => async (dispatch) => {
   try {
-    const querySnapshot = await getDocs(collection(db, "borrow_history"));
+    // const querySnapshot = await getDocs(collection(db, "borrow_history"));
+    const historyRef = collection(db, "borrow_history");
+    const q = query(historyRef, where("userId", "==", uid));
+    const querySnapshot = await getDocs(q);
     const history = [];
     querySnapshot.forEach((doc) => {
       const id = doc.id;
@@ -69,7 +72,7 @@ export const getAllBorrowHistoryAction = () => async (dispatch) => {
 // };
 
 export const updateHistoryAction =
-  ({ id, ...rest }) =>
+  ({ id, ...rest }, uid) =>
   async (dispatch) => {
     try {
       const docRef = doc(db, "borrow_history", id);
@@ -79,7 +82,7 @@ export const updateHistoryAction =
       });
 
       await docRefPromise;
-      dispatch(getAllBorrowHistoryAction());
+      dispatch(getAllBorrowHistoryAction(uid));
       toast.success("Book updated successfully");
       // TODO: Grab all the books and update store.
     } catch (e) {

@@ -22,11 +22,13 @@ function Home() {
         </Row>
         {/* Book Card */}
         <Row>
-          <Col>
-            {bookList.map((book) => {
-              return <CustomCard key={book.id} {...book} />;
-            })}
-          </Col>
+          {bookList.map((book) => {
+            return (
+              <Col>
+                <CustomCard key={book.id} {...book} />
+              </Col>
+            );
+          })}
         </Row>
       </Container>
     </DefaultLayout>
